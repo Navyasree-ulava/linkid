@@ -134,7 +134,13 @@ npx prisma migrate dev
 # (Optional) Open Prisma Studio to inspect data
 npx prisma studio
 ```
+## 🐳 Docker Setup (optional)
 
+```bash
+docker-compose up -d   # starts PostgreSQL
+npx prisma migrate dev
+npm run dev
+```
 ### 4. Start the Development Server
 
 ```bash
@@ -242,10 +248,10 @@ git push origin feat/your-feature-name
 # Open a Pull Request on GitHub
 ```
 
-### Good First Issues 🌱
+## 🗺️ Roadmap / Open Issues
 
-Check out issues labeled [`good first issue`](https://github.com/vishnukothakapu/linkid/labels/good%20first%20issue) — these are beginner-friendly and well-documented.
-
+See [GitHub Issues](https://github.com/vishnukothakapu/linkid/issues) for 
+tasks open to contributors.
 ---
 
 ## 📄 License
