@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Copy, Check, ExternalLink, Link2 } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import QRCode from "./qrcode";
 
-export function LinkIdCard({ username }: { username: string }) {
+export function LinkIdCard({ username, qrCode }: { username: string }) {
   const [copied, setCopied] = useState(false);
 
   function copyProfile() {
@@ -20,6 +21,7 @@ export function LinkIdCard({ username }: { username: string }) {
         <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
           <Link2 className="h-4 w-4 sm:h-5 sm:w-5" />
           Your LinkID
+          {qrCode}
         </CardTitle>
       </CardHeader>
 

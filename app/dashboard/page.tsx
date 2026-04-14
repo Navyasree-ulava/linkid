@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import DashboardClient from "./DashboardClient";
 import CreateLinkId from "./CreateLinkId";
+import QRCode from "./qrcode";
 
 export default async function DashboardPage() {
     const session = await getServerSession(authOptions);
@@ -20,6 +21,7 @@ export default async function DashboardPage() {
         <DashboardClient
             username={user.username}
             initialLinks={user.links}
+            qrCode={<QRCode />} 
         />
     );
 }

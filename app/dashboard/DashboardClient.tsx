@@ -8,9 +8,11 @@ import { LinkIdCard } from "./LinkIdCard";
 export default function DashboardClient({
     username,
     initialLinks,
+    qrCode,
 }: {
     username: string;
     initialLinks: any[];
+    qrCode?: React.ReactNode;
 }) {
     const [links, setLinks] = useState(initialLinks);
     const [showAdd, setShowAdd] = useState(false);
@@ -55,7 +57,7 @@ export default function DashboardClient({
                     </p>
                 </section>
 
-                <LinkIdCard username={username} />
+                <LinkIdCard username={username} qrCode={qrCode} />
 
                 <LinksSection
                     username={username}
