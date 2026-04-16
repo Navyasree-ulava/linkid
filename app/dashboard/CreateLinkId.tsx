@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { DashboardNavbar } from "../components/DashboardNavbar";
+import { Check } from "lucide-react";
+
 
 export default function CreateLinkId() {
     const [username, setUsername] = useState("");
@@ -94,9 +96,10 @@ export default function CreateLinkId() {
                                                         key={s}
                                                         type="button"
                                                         onClick={() => checkUsername(s)}
-                                                        className="text-xs px-2 py-1 rounded-md border border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950 transition-colors"
+                                                        className="flex items-center gap-1 text-xs px-2 py-1 rounded-md border border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950 transition-colors"
                                                     >
-                                                        ✔ {s}
+                                                        <Check className="w-3 h-3" />
+                                                        {s}
                                                     </button>
                                                 ))}
                                             </div>
