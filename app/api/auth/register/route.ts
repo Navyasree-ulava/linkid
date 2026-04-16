@@ -13,6 +13,16 @@ export async function POST(req: Request) {
             );
         }
 
+        const passwordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+        if (!passwordRegex.test(password)) {
+            return NextResponse.json(
+                { error: "Password does not meet requirements" },
+                { status: 400 }
+            );
+        }
+
         const existingUser = await prisma.user.findUnique({
             where: { email },
         });

@@ -15,8 +15,18 @@ import { FaGithub } from "react-icons/fa";
 export default function RegisterPage() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const [password, setPassword] = useState("");
+    const getPasswordError = (password: string) => {
+        if (password.length < 8) return "Must be at least 8 characters";
+        if (!/[A-Z]/.test(password)) return "Must include one uppercase letter";
+        if (!/[a-z]/.test(password)) return "Must include one lowercase letter";
+        if (!/\d/.test(password)) return "Must include one number";
+        if (!/[@$!%*?&]/.test(password)) return "Must include one special character";
+        return null;
+    };
 
-    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+       const error = getPasswordError(password);
+       async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setLoading(true);
 
@@ -104,8 +114,18 @@ export default function RegisterPage() {
                             name="password"
                             type="password"
                             placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             required
+                            className={`${
+                                password && error ? "border-red-500 focus-visible:ring-red-500" : ""
+                            }`}
                         />
+                        {password && error && (
+                        <p className="mt-2 text-sm text-red-500">
+                            {error}
+                        </p>
+                        )}
 
                         <Button className="w-full" disabled={loading}>
                             {loading ? "Creating account..." : "Signup with Email"}
