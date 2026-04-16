@@ -10,6 +10,7 @@ import { DashboardNavbar } from "../components/DashboardNavbar";
 export default function CreateLinkId() {
     const [username, setUsername] = useState("");
     const [available, setAvailable] = useState<null | boolean>(null);
+    const [suggestions, setSuggestions] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
 
     async function checkUsername(value: string) {
@@ -17,12 +18,14 @@ export default function CreateLinkId() {
 
         if (value.length < 3) {
             setAvailable(null);
+            setSuggestions([]);
             return;
         }
 
         const res = await fetch(`/api/username/check?username=${value}`);
         const data = await res.json();
         setAvailable(data.available);
+        setSuggestions(data.suggestions ?? []);
     }
 
     async function createLinkId() {
@@ -80,9 +83,26 @@ export default function CreateLinkId() {
                             )}
 
                             {available === false && (
-                                <p className="text-sm text-red-500">
-                                    Username already taken
-                                </p>
+                                <div className="space-y-2">
+                                    <p className="text-sm text-red-500">Username already taken</p>
+                                    {suggestions.length > 0 && (
+                                        <div className="space-y-1">
+                                            <p className="text-xs text-muted-foreground">Suggestions:</p>
+                                            <div className="flex flex-wrap gap-2">
+                                                {suggestions.map((s) => (
+                                                    <button
+                                                        key={s}
+                                                        type="button"
+                                                        onClick={() => checkUsername(s)}
+                                                        className="text-xs px-2 py-1 rounded-md border border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950 transition-colors"
+                                                    >
+                                                        ✔ {s}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
                             )}
                         </div>
 

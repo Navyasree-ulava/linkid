@@ -21,7 +21,7 @@ export function LinkItem({
     onUpdate,
     onDelete,
 }: {
-    link: { id: string; platform: string; url: string };
+    link: { id: string; platform: string; url: string; clicks: number };
     username: string;
     onUpdate: (id: string, url: string) => Promise<void>;
     onDelete: (id: string) => Promise<void>;
@@ -59,6 +59,9 @@ export function LinkItem({
                         </p>
                         <p className="text-sm text-muted-foreground truncate">
                             {link.url}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                            {link.clicks} {link.clicks === 1 ? "click" : "clicks"}
                         </p>
                     </div>
                 </div>

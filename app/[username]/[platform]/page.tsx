@@ -6,7 +6,7 @@ export default async function PlatformRedirect({
 }: {
     params: Promise<{ username: string; platform: string }>;
 }) {
-    const { username, platform } = await params; 
+    const { username, platform } = await params;
 
     const link = await prisma.link.findFirst({
         where: {
@@ -18,6 +18,11 @@ export default async function PlatformRedirect({
     if (!link) {
         notFound();
     }
+
+    await prisma.link.update({
+        where: { id: link.id },
+        data: { clicks: { increment: 1 } },
+    });
 
     redirect(link.url);
 }
