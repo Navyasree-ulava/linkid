@@ -1,14 +1,14 @@
 import { ArrowRight,Globe } from "lucide-react";
 import { PLATFORM_ICONS } from "../../lib/platformIcons";
-import { Link } from "./types/type";
+import { ProfileLinks } from "./types/type";
 
-export function ProfileLinkItem({ link }: { link: Link }) {
+export function ProfileLinkItem({ link, username }: ProfileLinks) {
     const Icon =
         PLATFORM_ICONS[link.platform] ?? Globe;
 
     return (
         <a
-            href={link.url}
+            href={`/${username}/${link.platform}`}
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center justify-between rounded-lg border bg-background px-4 py-3 transition hover:bg-muted"

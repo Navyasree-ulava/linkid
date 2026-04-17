@@ -30,3 +30,8 @@ export type ProfileHeader = {
     username: string;
 }
 
+export type ProfileLinks = {
+    link: Link;
+    username: string;
+}
+
