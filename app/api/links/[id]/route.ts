@@ -19,6 +19,7 @@ export async function PUT(
 
     const { id } = await context.params;
     const { url } = await req.json();
+    
 
     if (!url || typeof url !== "string") {
         return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
@@ -34,6 +35,15 @@ export async function PUT(
     }
 
     const finalUrl = normalizeUrl(url);
+        if (
+            finalUrl.includes("/messaging/") ||
+            finalUrl.includes("/feed/")
+        ) {
+            return NextResponse.json(
+                { error: "Please enter a valid public link" },
+                { status: 400 }
+            );
+        }
 
     if (!validatePlatformUrl(link.platform as any, finalUrl)) {
         return NextResponse.json(

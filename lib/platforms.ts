@@ -12,7 +12,7 @@ export type Platform =
 
 const PLATFORM_PATTERNS: Record<Platform, RegExp> = {
     github: /^https?:\/\/(www\.)?github\.com\/[^/]+/i,
-    linkedin: /^https?:\/\/(www\.)?linkedin\.com\/in\/[^/]+/i,
+    linkedin: /^https?:\/\/(www\.)?linkedin\.com\/(in|company)\/[^/]+/i,
     leetcode: /^https?:\/\/(www\.)?leetcode\.com\/[^/]+/i,
     youtube: /^https?:\/\/(www\.)?youtube\.com\/[^/]+/i,
     x: /^https?:\/\/(www\.)?x\.com\/[^/]+/i,
@@ -39,7 +39,6 @@ export function detectPlatform(url: string): Platform {
             return platform as Platform;
         }
     }
-
     return "website";
 }
 
@@ -48,5 +47,11 @@ export function validatePlatformUrl(
     url: string
 ): boolean {
     const normalized = normalizeUrl(url);
+    if(
+        normalized.includes("/messaging/") ||
+        normalized.includes("/feed/")
+    ) {
+        return false;
+    }
     return PLATFORM_PATTERNS[platform].test(normalized);
 }

@@ -33,8 +33,17 @@ export async function POST(req: Request) {
             { status: 400 }
         );
     }
-
     const finalUrl = normalizeUrl(rawUrl);
+    if (
+        finalUrl.includes("/messaging/") ||
+        finalUrl.includes("/feed")
+    ) {
+        return NextResponse.json(
+            {error: "Please enter a valid public link"},
+            {status: 400}
+        );
+    }
+    
     const detectedPlatform = detectPlatform(finalUrl);
 
     if (!detectedPlatform) {
@@ -66,6 +75,17 @@ export async function POST(req: Request) {
         finalLabel =
             detectedPlatform.charAt(0).toUpperCase() +
             detectedPlatform.slice(1);
+    }
+
+    //block non-public link  
+    if (
+        finalUrl.includes("/messaging/") ||
+        finalUrl.includes("/feed/")
+    ) {
+        return NextResponse.json(
+           { error: "Please enter a valid public link" },
+           { status: 400 }
+        );
     }
 
     if (!validatePlatformUrl(detectedPlatform, finalUrl)) {
