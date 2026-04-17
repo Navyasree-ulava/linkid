@@ -19,7 +19,7 @@ export function ProfileCard({
             </CardHeader>
 
             <CardContent className="space-y-3">
-                <ProfileLinks links={user.links} />
+                <ProfileLinks links={user.links} username={username} />
                 {showCTA && <ProfileCTA />}
             </CardContent>
         </Card>
