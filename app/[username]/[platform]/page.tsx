@@ -1,12 +1,13 @@
 import prisma from "@/lib/prisma";
 import { redirect, notFound } from "next/navigation";
+import { PlatformParams } from "../types/type";
 
 export default async function PlatformRedirect({
     params,
 }: {
-    params: Promise<{ username: string; platform: string }>;
+    params: PlatformParams;
 }) {
-    const { username, platform } = await params;
+    const { username, platform } = params;
 
     const link = await prisma.link.findFirst({
         where: {

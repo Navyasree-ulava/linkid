@@ -5,7 +5,7 @@ import { authOptions } from "@/lib/auth";
 import { ProfileCard } from "./ProfileCard";
 import { ProfileFooter } from "./ProfileFooter";
 
-export async function generateMetadata({ params }: any) {
+export async function generateMetadata({ params }: { params: Promise<{ username: string }> }) {
     const { username } = await params;
 
     return {
@@ -38,7 +38,7 @@ export default async function PublicProfile({
         <main className="min-h-screen bg-muted/40 px-4 py-16">
             <div className="mx-auto max-w-md">
                 <ProfileCard
-                    user={user}
+                    user={{ name: user.name, username: username, links: user.links }}
                     username={username}
                     showCTA={!session}
                 />

@@ -1,7 +1,8 @@
 import { ArrowRight,Globe } from "lucide-react";
 import { PLATFORM_ICONS } from "../../lib/platformIcons";
+import { ProfileLinks } from "./types/type";
 
-export function ProfileLinkItem({ link,username }: { link: any,username:string }) {
+export function ProfileLinkItem({ link, username }: ProfileLinks) {
     const Icon =
         PLATFORM_ICONS[link.platform] ?? Globe;
 
