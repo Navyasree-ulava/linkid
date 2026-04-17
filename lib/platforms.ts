@@ -39,6 +39,7 @@ export function detectPlatform(url: string): Platform {
             return platform as Platform;
         }
     }
+
     return "website";
 }
 
@@ -47,11 +48,13 @@ export function validatePlatformUrl(
     url: string
 ): boolean {
     const normalized = normalizeUrl(url);
-    if(
+
+    if (
         normalized.includes("/messaging/") ||
         normalized.includes("/feed/")
     ) {
         return false;
     }
+
     return PLATFORM_PATTERNS[platform].test(normalized);
 }

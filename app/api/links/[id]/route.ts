@@ -13,13 +13,13 @@ export async function PUT(
     context: { params: Promise<{ id: string }> }
 ) {
     const session = await getServerSession(authOptions);
+
     if (!session?.user?.email) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { id } = await context.params;
     const { url } = await req.json();
-    
 
     if (!url || typeof url !== "string") {
         return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
@@ -35,19 +35,10 @@ export async function PUT(
     }
 
     const finalUrl = normalizeUrl(url);
-        if (
-            finalUrl.includes("/messaging/") ||
-            finalUrl.includes("/feed/")
-        ) {
-            return NextResponse.json(
-                { error: "Please enter a valid public link" },
-                { status: 400 }
-            );
-        }
 
     if (!validatePlatformUrl(link.platform as any, finalUrl)) {
         return NextResponse.json(
-            { error: `Invalid ${link.platform} URL` },
+            { error: "Please enter a valid public link" },
             { status: 400 }
         );
     }
@@ -65,6 +56,7 @@ export async function DELETE(
     context: { params: Promise<{ id: string }> }
 ) {
     const session = await getServerSession(authOptions);
+
     if (!session?.user?.email) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
