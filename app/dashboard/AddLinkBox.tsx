@@ -3,12 +3,18 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { getCsrfToken } from "@/lib/csrfClient";
 import toast from "react-hot-toast";
+
+type DashboardLink = {
+    id: string;
+    url: string;
+} & Record<string, unknown>;
 
 export default function AddLinkBox({
     onAdded,
 }: {
-    onAdded: (link: any) => void;
+    onAdded: (link: DashboardLink) => void;
 }) {
     const [url, setUrl] = useState("");
     const [label, setLabel] = useState("");
@@ -25,10 +31,14 @@ export default function AddLinkBox({
         }
 
         setLoading(true);
+        const csrfToken = await getCsrfToken();
 
         const res = await fetch("/api/links", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "x-csrf-token": csrfToken,
+            },
             body: JSON.stringify({
                 url,
                 label: needsLabel ? label : undefined,

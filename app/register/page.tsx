@@ -1,46 +1,57 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { Mail, Lock, User, Eye } from "lucide-react";
+import { Eye, Lock, Mail, User } from "lucide-react";
+import { useState } from "react";
+import { FaGithub } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Navbar } from "../components/Navbar";
+import { getCsrfToken } from "@/lib/csrfClient";
+import { useCsrf } from "@/lib/useCsrf";
 
-import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
+import { Navbar } from "../components/Navbar";
 
 export default function RegisterPage() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState("");
-    const getPasswordError = (password: string) => {
-        if (password.length < 8) return "Must be at least 8 characters";
-        if (!/[A-Z]/.test(password)) return "Must include one uppercase letter";
-        if (!/[a-z]/.test(password)) return "Must include one lowercase letter";
-        if (!/\d/.test(password)) return "Must include one number";
-        if (!/[@$!%*?&]/.test(password)) return "Must include one special character";
+    const csrfToken = useCsrf();
+
+    const getPasswordError = (value: string) => {
+        if (value.length < 8) return "Must be at least 8 characters";
+        if (!/[A-Z]/.test(value)) return "Must include one uppercase letter";
+        if (!/[a-z]/.test(value)) return "Must include one lowercase letter";
+        if (!/\d/.test(value)) return "Must include one number";
+        if (!/[@$!%*?&]/.test(value)) return "Must include one special character";
+
         return null;
     };
 
-       const error = getPasswordError(password);
-       async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    const error = getPasswordError(password);
+
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setLoading(true);
 
         const form = e.currentTarget;
+        const requestCsrfToken = csrfToken || await getCsrfToken();
         const data = {
-            name: (form.elements.namedItem("name") as HTMLInputElement).value,
+            _csrf: requestCsrfToken,
             email: (form.elements.namedItem("email") as HTMLInputElement).value,
+            name: (form.elements.namedItem("name") as HTMLInputElement).value,
             password: (form.elements.namedItem("password") as HTMLInputElement).value,
         };
 
         const res = await fetch("/api/auth/register", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "x-csrf-token": requestCsrfToken,
+            },
             body: JSON.stringify(data),
         });
 
@@ -59,18 +70,17 @@ export default function RegisterPage() {
 
             <div className="flex min-h-[calc(100vh-64px)] items-center justify-center px-4">
                 <div className="w-full max-w-md space-y-3 rounded-xl border bg-background p-6 shadow-sm">
-                    {/* HEADER */}
-                    <div className="text-center space-y-1">
+                    <div className="space-y-1 text-center">
                         <h1 className="text-2xl font-bold">Create your account</h1>
                         <p className="text-sm text-muted-foreground">
                             Start building your LinkID
                         </p>
                     </div>
-                    {/* OAUTH SIGNUP */}
+
                     <div className="space-y-2">
                         <Button
                             variant="outline"
-                            className="w-full flex items-center justify-center gap-2"
+                            className="flex w-full items-center justify-center gap-2"
                             onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
                         >
                             <FcGoogle className="h-5 w-5" />
@@ -79,7 +89,7 @@ export default function RegisterPage() {
 
                         <Button
                             variant="outline"
-                            className="w-full flex items-center justify-center gap-2"
+                            className="flex w-full items-center justify-center gap-2"
                             onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
                         >
                             <FaGithub className="h-5 w-5" />
@@ -87,69 +97,62 @@ export default function RegisterPage() {
                         </Button>
                     </div>
 
-
-                    {/* DIVIDER */}
                     <div className="flex items-center gap-2">
                         <div className="h-px w-full bg-border" />
                         <span className="text-xs text-muted-foreground">OR</span>
                         <div className="h-px w-full bg-border" />
                     </div>
 
-
-                    {/* EMAIL SIGNUP */}
                     <form onSubmit={handleSubmit} className="space-y-3">
-                        
-  {/* --- Full Name --- */}
-  <div className="relative flex items-center mb-4">
-    <User className="absolute left-3 text-gray-400" size={20} /> 
-    <Input 
-      name="name"
-      placeholder="Full name"
-      required
-      className="pl-10 bg-[#1a1a1a] border-gray-800 focus:border-purple-500" 
-    />
-  </div>
+                        <input type="hidden" name="_csrf" value={csrfToken} />
 
-  {/* --- Email --- */}
-  <div className="relative flex items-center mb-4">
-    <Mail className="absolute left-3 text-gray-400" width="20" />
-    <Input 
-      name="email"
-      type="email"
-      placeholder="Email"
-      required
-      className="pl-10 bg-[#1a1a1a] border-gray-800 focus:border-purple-500" 
-    />
-  </div>
+                        <div className="relative mb-4 flex items-center">
+                            <User className="absolute left-3 text-gray-400" size={20} />
+                            <Input
+                                name="name"
+                                placeholder="Full name"
+                                required
+                                className="bg-[#1a1a1a] pl-10 border-gray-800 focus:border-purple-500"
+                            />
+                        </div>
 
-  {/* --- Password --- */}
-  <div className="relative flex items-center">
-    <Lock className="absolute left-3 text-gray-400" width="20" />
-    <Input 
-      name="password"
-      type="password"
-      placeholder="Password"
-      value={password}
-      onChange={(e) => setPassword(e.target.value)}
-      required
-      className={`pl-10 pr-10 bg-[#1a1a1a] border-gray-800 focus:border-purple-500 ${password && error ? "border-red-500" : ""}`}
-    />
-    <Eye className="absolute right-3 text-gray-400 cursor-pointer hover:text-white" width="20" />
-  </div>
+                        <div className="relative mb-4 flex items-center">
+                            <Mail className="absolute left-3 text-gray-400" width="20" />
+                            <Input
+                                name="email"
+                                type="email"
+                                placeholder="Email"
+                                required
+                                className="bg-[#1a1a1a] pl-10 border-gray-800 focus:border-purple-500"
+                            />
+                        </div>
 
-  {password && error && (
-    <p className="mt-2 text-sm text-red-500">{error}</p>
-  )}
+                        <div className="relative flex items-center">
+                            <Lock className="absolute left-3 text-gray-400" width="20" />
+                            <Input
+                                name="password"
+                                type="password"
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                className={`bg-[#1a1a1a] pl-10 pr-10 border-gray-800 focus:border-purple-500 ${password && error ? "border-red-500" : ""}`}
+                            />
+                            <Eye
+                                className="absolute right-3 cursor-pointer text-gray-400 hover:text-white"
+                                width="20"
+                            />
+                        </div>
 
-  <Button className="w-full" disabled={loading} type="submit">
-    {loading ? "Creating account..." : "Signup with Email"}
-  </Button>
-</form>
+                        {password && error && (
+                            <p className="mt-2 text-sm text-red-500">{error}</p>
+                        )}
 
-                            
-                    
-                   
-                    {/* FOOTER */}
+                        <Button className="w-full" disabled={loading} type="submit">
+                            {loading ? "Creating account..." : "Signup with Email"}
+                        </Button>
+                    </form>
+
                     <p className="text-center text-sm text-muted-foreground">
                         Already have an account?{" "}
                         <Link href="/login" className="font-medium hover:underline">

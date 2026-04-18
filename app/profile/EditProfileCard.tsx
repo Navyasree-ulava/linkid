@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { getCsrfToken } from "@/lib/csrfClient";
 import { Check, X } from "lucide-react";
 export default function EditProfileCard({
     initialName,
@@ -38,10 +39,14 @@ export default function EditProfileCard({
 
     async function saveChanges() {
         setLoading(true);
+        const csrfToken = await getCsrfToken();
 
         const res = await fetch("/api/profile/update", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "x-csrf-token": csrfToken,
+            },
             body: JSON.stringify({ name, username,bio }),
         });
 

@@ -1,9 +1,15 @@
 "use client";
 import { useState } from "react";
 import { DashboardNavbar } from "@/app/components/DashboardNavbar";
+import { getCsrfToken } from "@/lib/csrfClient";
 import toast, { Toaster } from "react-hot-toast";
 import { LinksSection } from "./LinksSection";
 import { LinkIdCard } from "./LinkIdCard";
+
+type DashboardLink = {
+    id: string;
+    url: string;
+} & Record<string, unknown>;
 
 export default function DashboardClient({
     username,
@@ -11,21 +17,26 @@ export default function DashboardClient({
     qrCode,
 }: {
     username: string;
-    initialLinks: any[];
+    initialLinks: DashboardLink[];
     qrCode?: React.ReactNode;
 }) {
     const [links, setLinks] = useState(initialLinks);
     const [showAdd, setShowAdd] = useState(false);
 
-    async function addLink(link: any) {
+    async function addLink(link: DashboardLink) {
         setLinks((prev) => [...prev, link]);
         setShowAdd(false);
     }
 
     async function updateLink(id: string, url: string) {
+        const csrfToken = await getCsrfToken();
+
         await fetch(`/api/links/${id}`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "x-csrf-token": csrfToken,
+            },
             body: JSON.stringify({ url }),
         });
         toast.success("Link updated");
@@ -39,7 +50,15 @@ export default function DashboardClient({
 
     async function deleteLink(id: string) {
         if (!confirm("Delete this link?")) return;
-        await fetch(`/api/links/${id}`, { method: "DELETE" });
+
+        const csrfToken = await getCsrfToken();
+
+        await fetch(`/api/links/${id}`, {
+            headers: {
+                "x-csrf-token": csrfToken,
+            },
+            method: "DELETE",
+        });
         toast.success("Link deleted");
         setLinks((prev) => prev.filter((l) => l.id !== id));
     }
