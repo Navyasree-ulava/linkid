@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { getCsrfToken } from "@/lib/csrfClient";
 import { DashboardNavbar } from "../components/DashboardNavbar";
 import { Check } from "lucide-react";
 
@@ -32,10 +33,12 @@ export default function CreateLinkId() {
 
     async function createLinkId() {
         setLoading(true);
+        const csrfToken = await getCsrfToken();
         const res = await fetch("/api/username/create", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "x-csrf-token": csrfToken,
             },
             body: JSON.stringify({ username }),
         });
