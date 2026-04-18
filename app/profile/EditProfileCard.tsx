@@ -9,14 +9,17 @@ import { Check, X } from "lucide-react";
 export default function EditProfileCard({
     initialName,
     initialUsername,
+    initialBio,
     onSuccess,
 }: {
     initialName: string;
     initialUsername: string;
+    initialBio?: string | null;
     onSuccess?: () => void;
 }) {
     const [name, setName] = useState(initialName);
     const [username, setUsername] = useState(initialUsername);
+    const [bio, setBio] = useState(initialBio || "");
     const [available, setAvailable] = useState<boolean | null>(null);
     const [loading, setLoading] = useState(false);
 
@@ -39,7 +42,7 @@ export default function EditProfileCard({
         const res = await fetch("/api/profile/update", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, username }),
+            body: JSON.stringify({ name, username,bio }),
         });
 
         setLoading(false);
@@ -84,6 +87,21 @@ export default function EditProfileCard({
                             onChange={(e) => checkUsername(e.target.value)}
                         />
                     </div>
+
+                    <div className="space-y-1">
+                        <Label>Bio</Label>
+                        <textarea
+                            className="w-full rounded-md border p-2 text-sm"
+                            maxLength={160}
+                            value={bio}
+                            onChange={(e) => setBio(e.target.value)}
+                            placeholder="Tell something about yourself..."
+                        />
+                        <p className="text-xs text-muted-foreground text-right">
+                            {bio.length}/160
+                        </p>
+                    </div>
+
 
                     {available === true && (
                         <p className="flex items-center gap-1 text-sm text-green-600">

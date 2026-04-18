@@ -9,6 +9,7 @@ export function ProfileHeaderCard({
     user: {
         name?: string | null;
         username?: string | null;
+        bio?: string | null;
         createdAt: string | Date;
     };
     sessionImage?: string | null;
@@ -42,11 +43,18 @@ export function ProfileHeaderCard({
                             year: "numeric",
                         })}
                     </p>
+                    {user.bio && (
+                        <p className="text-sm text-muted-foreground mt-2">
+                            {user.bio}
+                        </p>
+                    )}
+
                 </div>
 
                 <EditProfileModal
                     initialName={user.name ?? ""}
                     initialUsername={user.username ?? ""}
+                    initialBio={user.bio ?? ""}
                 />
             </CardContent>
         </Card>
