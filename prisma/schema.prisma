@@ -18,6 +18,8 @@ model User {
 
   username      String?  @unique
 
+  bio            String?  
+
   links         Link[]
   accounts      Account[]
   sessions      Session[]

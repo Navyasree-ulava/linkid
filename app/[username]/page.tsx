@@ -38,7 +38,7 @@ export default async function PublicProfile({
         <main className="min-h-screen bg-muted/40 px-4 py-16">
             <div className="mx-auto max-w-md">
                 <ProfileCard
-                    user={{ name: user.name, username: username, links: user.links }}
+                    user={{ name: user.name, username: username, bio: user.bio, links: user.links }}
                     username={username}
                     showCTA={!session}
                 />

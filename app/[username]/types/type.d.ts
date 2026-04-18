@@ -18,6 +18,7 @@ export type User = {
     user: {
         name: string | null;
         username: string;
+        bio: string | null;
         links: Link[]
     };
     username: string;
@@ -28,6 +29,7 @@ export type User = {
 export type ProfileHeader = {
     name: string | null;
     username: string;
+    bio?: string | null;
 }
 
 export type ProfileLinks = {

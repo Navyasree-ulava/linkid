@@ -1,7 +1,7 @@
 import type { ProfileHeader } from "./types/type";
 
 export function ProfileHeader(props: ProfileHeader) {
-    const { name, username } = props;
+    const { name, username, bio } = props;
     return (
         <div className="text-center space-y-2">
             <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-muted text-2xl font-bold">
@@ -11,6 +11,11 @@ export function ProfileHeader(props: ProfileHeader) {
             <div>
                 <h1 className="text-2xl font-bold">{name ?? username}</h1>
                 <p className="text-sm text-muted-foreground">@{username}</p>
+                {bio && (
+                    <p className="text-sm text-balance mt-3">
+                        {bio}
+                    </p>
+                )}
             </div>
         </div>
     );

@@ -16,9 +16,11 @@ import EditProfileCard from "./EditProfileCard";
 export default function EditProfileModal({
     initialName,
     initialUsername,
+    initialBio,
 }: {
     initialName: string;
     initialUsername: string;
+    initialBio?: string | null;
 }) {
     const [open, setOpen] = useState(false);
 
@@ -61,6 +63,7 @@ export default function EditProfileModal({
                 <EditProfileCard
                     initialName={initialName}
                     initialUsername={initialUsername}
+                    initialBio={initialBio}
                     onSuccess={() => setOpen(false)}
                 />
             </DialogContent>

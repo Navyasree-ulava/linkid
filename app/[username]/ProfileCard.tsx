@@ -9,7 +9,7 @@ export function ProfileCard(props: User) {
     return (
         <Card className="shadow-lg">
             <CardHeader className="pb-2">
-                <ProfileHeader name={user.name} username={username} />
+                <ProfileHeader name={user.name} username={username} bio={user.bio} />
             </CardHeader>
 
             <CardContent className="space-y-3">
