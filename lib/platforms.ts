@@ -8,6 +8,10 @@ export type Platform =
     | "instagram"
     | "discord"
     | "twitch"
+    | "hashnode"
+    | "devto"
+    | "medium"
+    | "dribbble"
     | "website";
 
 const PLATFORM_PATTERNS: Record<Platform, RegExp> = {
@@ -20,6 +24,10 @@ const PLATFORM_PATTERNS: Record<Platform, RegExp> = {
     instagram: /^https?:\/\/(www\.)?instagram\.com\/[^/]+/i,
     discord: /^https?:\/\/(www\.)?discord\.com\/users\/[^/]+/i,
     twitch: /^https?:\/\/(www\.)?twitch\.tv\/[^/]+/i,
+    hashnode: /^https?:\/\/([^/]+\.)?hashnode\.(com|dev)(\/[^/]+)?/i,
+    devto: /^https?:\/\/(www\.)?dev\.to\/[^/]+/i,
+    medium: /^https?:\/\/(www\.)?medium\.com\/@?[^/]+/i,
+    dribbble: /^https?:\/\/(www\.)?dribbble\.com\/[^/]+/i,
     website: /^https?:\/\/.+/i,
 };
 
