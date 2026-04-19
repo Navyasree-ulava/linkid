@@ -5,9 +5,9 @@ import { PlatformParams } from "../types/type";
 export default async function PlatformRedirect({
     params,
 }: {
-    params: PlatformParams;
+    params: Promise<PlatformParams>;
 }) {
-    const { username, platform } = params;
+    const { username, platform } = await params;
 
     const link = await prisma.link.findFirst({
         where: {
