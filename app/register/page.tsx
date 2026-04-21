@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { Eye, Lock, Mail, User } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -18,6 +18,7 @@ import { Navbar } from "../components/Navbar";
 export default function RegisterPage() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const [password, setPassword] = useState("");
     const csrfToken = useCsrf();
 
@@ -131,17 +132,26 @@ export default function RegisterPage() {
                             <Lock className="absolute left-3 text-gray-400" width="20" />
                             <Input
                                 name="password"
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 placeholder="Password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                                 className={`bg-[#1a1a1a] pl-10 pr-10 border-gray-800 focus:border-purple-500 ${password && error ? "border-red-500" : ""}`}
                             />
+                            {showPassword ? (
+                                <EyeOff
+                                    onClick={() => setShowPassword((prev) => !prev)}
+                                    className="absolute right-3 cursor-pointer text-gray-400 hover:text-white"
+                                    width="20"
+                                />
+                            ) : (
                             <Eye
+                                onClick={() => setShowPassword((prev) => !prev)}
                                 className="absolute right-3 cursor-pointer text-gray-400 hover:text-white"
                                 width="20"
-                            />
+                                />
+                            )}
                         </div>
 
                         {password && error && (
