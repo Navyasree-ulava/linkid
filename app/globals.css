@@ -8,7 +8,7 @@
 html {
   scroll-behavior: smooth;
 }
-
+@import "react-image-crop/dist/ReactCrop.css";
 @import "tailwindcss";
 @import "tw-animate-css";
 

@@ -28,9 +28,17 @@ export default async function PublicProfile({
     const session = await getServerSession(authOptions);
 
     const user = await prisma.user.findUnique({
-        where: { username },
-        include: { links: { orderBy: { order: "asc" } } },
-    });
+    where: { username },
+    select: {
+        name: true,
+        username: true,
+        bio: true,
+        image: true,
+        links: {
+            orderBy: { order: "asc" },
+        },
+    },
+});
 
     if (!user) notFound();
 
@@ -38,7 +46,7 @@ export default async function PublicProfile({
         <main className="min-h-screen bg-muted/40 px-4 py-16">
             <div className="mx-auto max-w-md">
                 <ProfileCard
-                    user={{ name: user.name, username: username, bio: user.bio, links: user.links }}
+                    user={{ name: user.name, username: username, bio: user.bio, image: user.image, links: user.links }}
                     username={username}
                     showCTA={!session}
                 />

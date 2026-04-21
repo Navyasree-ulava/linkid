@@ -57,10 +57,30 @@ export const authOptions: NextAuthOptions = {
         },
     },
 
+    callbacks: {
+        async jwt({ token, trigger, session }) {
+            if (trigger === "update" && "image" in (session ?? {})) {
+                token.image = session.image ?? null;
+            }
+            if (!token.image) {
+                const user = await prisma.user.findUnique({
+                    where: { email: token.email! },
+                    select: { image: true },
+                });
+                token.image = user?.image ?? null;
+            }
+            return token;
+        },
+        async session({ session, token }) {
+            if (session.user) {
+                session.user.image = token.image as string ?? null;
+            }
+            return session;
+        },
+    },
     session: {
         strategy: "jwt",
     },
-
     pages: {
         signIn: "/login",
     },
