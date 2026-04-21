@@ -1,13 +1,23 @@
 import type { ProfileHeader } from "./types/type";
+import Image from "next/image";
 
 export function ProfileHeader(props: ProfileHeader) {
-    const { name, username, bio } = props;
+    const { name, username, bio, image } = props;
     return (
         <div className="text-center space-y-2">
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-muted text-2xl font-bold">
-                {(name ?? username)[0]?.toUpperCase()}
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-muted text-2xl font-bold overflow-hidden">
+                {image ? (
+                    <Image
+                        src={image}
+                        alt={name ?? username}
+                        width={80}
+                        height={80}
+                        className="h-full w-full object-cover"
+                    />
+                ) : (
+                    (name ?? username)[0]?.toUpperCase()
+                )}
             </div>
-
             <div>
                 <h1 className="text-2xl font-bold">{name ?? username}</h1>
                 <p className="text-sm text-muted-foreground">@{username}</p>
