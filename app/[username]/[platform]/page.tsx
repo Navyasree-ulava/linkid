@@ -9,12 +9,18 @@ export default async function PlatformRedirect({
 }) {
     const { username, platform } = await params;
 
-    const link = await prisma.link.findFirst({
-        where: {
-            platform,
-            user: { username },
-        },
-    });
+    let link: { id: string; url: string } | null = null;
+    try {
+        link = await prisma.link.findFirst({
+            where: {
+                platform,
+                user: { username },
+            },
+            select: { id: true, url: true },
+        });
+    } catch {
+        notFound();
+    }
 
     if (!link) {
         notFound();
