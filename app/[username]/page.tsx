@@ -27,18 +27,33 @@ export default async function PublicProfile({
     const { username } = await params;
     const session = await getServerSession(authOptions);
 
-    const user = await prisma.user.findUnique({
-    where: { username },
-    select: {
-        name: true,
-        username: true,
-        bio: true,
-        image: true,
-        links: {
-            orderBy: { order: "asc" },
-        },
-    },
-});
+    let user:
+        | {
+              name: string | null;
+              username: string | null;
+              bio: string | null;
+              image: string | null;
+              links: unknown[];
+          }
+        | null = null;
+
+    try {
+        user = await prisma.user.findUnique({
+            where: { username },
+            select: {
+                name: true,
+                username: true,
+                bio: true,
+                image: true,
+                links: {
+                    orderBy: { order: "asc" },
+                },
+            },
+        });
+    } catch {
+        // If the DB isn't reachable in local OSS setups, fall back to 404 instead of a huge error page.
+        notFound();
+    }
 
     if (!user) notFound();
 
